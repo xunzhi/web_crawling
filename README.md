@@ -1,4 +1,4 @@
 ### Web Crawling
 
-Use beautifulsoup library to try to grab contents.
+Use beautifulsoup library to try to grab web contents.
 
