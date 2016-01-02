@@ -8,10 +8,10 @@ Change variable 'tieba_name'
 python crawl-tieba.py --csv
 
 Requirement: Need beautifulsoup4 library
-Function: Save all posts in a baidu tieba in the form of
+Function: Save all posts in a baidu tieba in the form:
 "title","id","number of replies","url","author","creation time","last replyer",
-"last reply time","good or not","span (time between creation and last reply)",
-"exist time"
+"last reply time","good (jing pin) or not","span (time between creation and last
+ reply)","exist time"
 '''
 #---------------------------------import---------------------------------------
 import argparse
@@ -74,13 +74,14 @@ def get_data(page_url):
     soup = bs4.BeautifulSoup(response, "html.parser")
     '''
     for li in soup.select('ul#thread_list li.j_thread_list'):
+        # luckily ads are not in j_thread_list class
         data = {}        
         data['addr'] = li.select('a[href^=/p]')[0]['href']
         data['title'] = li.select('a[href^=/p]')[0].get_text()
+        # ip author's posts do not have 'a'
         data['author'] = li.select('span.tb_icon_author')[0].get_text().strip()
         data['create_time'] = li.select('span.is_show_create_time')[0].get_text().strip()
         data['reply_number'] = li.select('span.threadlist_rep_num')[0].get_text().strip()
-        # ip author: do not have 'a'
         if len(li.select('span.j_replyer'))>0: 
             data['last_replyer'] =  li.select('span.j_replyer')[0].get_text().strip()
             data['last_reply_time'] = li.select('span.j_reply_data')[0].get_text().strip()
